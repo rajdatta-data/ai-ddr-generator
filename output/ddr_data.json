@@ -1,0 +1,60 @@
+{
+  "property_issue_summary": {
+    "property_details": "Residential building inspection",
+    "primary_issues": [
+      "Water seepage in walls",
+      "Cracks in terrace",
+      "Dampness in multiple areas"
+    ],
+    "overall_summary": "The property shows signs of moisture ingress and structural deterioration requiring immediate attention."
+  },
+  "area_wise_observations": [
+    {
+      "area": "Bathroom",
+      "observations": [
+        "Gaps in tile joints",
+        "Moisture seepage observed"
+      ],
+      "thermal_findings": "Temperature variation indicates moisture presence",
+      "related_images": []
+    },
+    {
+      "area": "Terrace",
+      "observations": [
+        "Cracks in surface",
+        "Vegetation growth"
+      ],
+      "thermal_findings": "Not Available",
+      "related_images": []
+    }
+  ],
+  "probable_root_cause": {
+    "primary_causes": [
+      "Water ingress through cracks",
+      "Poor waterproofing"
+    ],
+    "analysis": "Moisture is entering through cracks and spreading via capillary action causing dampness."
+  },
+  "severity_assessment": {
+    "overall_severity": "High",
+    "reasoning": "Continuous water seepage can damage structural components and increase repair costs."
+  },
+  "recommended_actions": {
+    "immediate_actions": [
+      "Seal cracks in terrace",
+      "Repair tile joints"
+    ],
+    "short_term": [
+      "Apply waterproof coating"
+    ],
+    "long_term": [
+      "Schedule periodic inspections"
+    ]
+  },
+  "additional_notes": [
+    "Thermal data partially unavailable"
+  ],
+  "missing_information": [
+    "Detailed thermal images not available"
+  ]
+}
