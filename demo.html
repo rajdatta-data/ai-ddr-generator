@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDR Generator - AI-Powered Report Generation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9ff;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background: #f0f2ff;
+            border-color: #764ba2;
+        }
+
+        .upload-area.dragover {
+            background: #e8ecff;
+            border-color: #764ba2;
+            transform: scale(1.02);
+        }
+
+        .upload-label {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .upload-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .file-name {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .progress.show {
+            display: block;
+        }
+
+        .progress-bar {
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: #f8f9ff;
+            border-radius: 15px;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .result-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-item h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .download-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .download-link:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature {
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .feature h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border-left: 4px solid #1976d2;
+        }
+
+        .alert-warning {
+            background: #fff3e0;
+            color: #f57c00;
+            border-left: 4px solid #f57c00;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #388e3c;
+            border-left: 4px solid #388e3c;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ DDR Generator</h1>
+            <p>AI-Powered Detailed Diagnostic Report Generation</p>
+        </div>
+
+        <div class="content">
+            <!-- Introduction -->
+            <div class="section">
+                <h2>📋 About This System</h2>
+                <p>This AI-powered system converts technical inspection and thermal reports into comprehensive, client-ready Detailed Diagnostic Reports (DDR). It intelligently extracts, analyzes, and synthesizes information while handling conflicts and missing data transparently.</p>
+            </div>
+
+            <!-- Features -->
+            <div class="section">
+                <h2>✨ Key Features</h2>
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI-Powered Analysis</h3>
+                        <p>Uses Claude AI to understand and structure technical data</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🔍</div>
+                        <h3>Smart Extraction</h3>
+                        <p>Extracts text, images, and measurements from PDFs</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🧩</div>
+                        <h3>Intelligent Merging</h3>
+                        <p>Combines inspection + thermal data logically</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📊</div>
+                        <h3>Professional Output</h3>
+                        <p>Generates formatted DOCX reports</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">⚠️</div>
+                        <h3>Conflict Detection</h3>
+                        <p>Identifies and reports inconsistencies</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">✅</div>
+                        <h3>No Hallucination</h3>
+                        <p>Only uses facts from source documents</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Note -->
+            <div class="section">
+                <div class="alert alert-info">
+                    <strong>ℹ️ Demo Interface</strong><br>
+                    This is a demonstration interface. The actual system runs via Python CLI or as a module. See the README for full usage instructions.
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="section">
+                <h2>📤 Upload Documents</h2>
+                
+                <div class="upload-area" id="inspectionDropZone">
+                    <label class="upload-label" for="inspectionFile">
+                        📄 Select Inspection Report (PDF)
+                    </label>
+                    <input type="file" id="inspectionFile" accept=".pdf">
+                    <div class="file-info" id="inspectionFileInfo">
+                        Selected: <span class="file-name" id="inspectionFileName"></span>
+                    </div>
+                </div>
+
+                <div class="upload-area" id="thermalDropZone">
+                    <label class="upload-label" for="thermalFile">
+                        🌡️ Select Thermal Report (PDF)
+                    </label>
+                    <input type="file" id="thermalFile" accept=".pdf">
+                    <div class="file-info" id="thermalFileInfo">
+                        Selected: <span class="file-name" id="thermalFileName"></span>
+                    </div>
+                </div>
+
+                <button class="btn" id="generateBtn" disabled>
+                    🚀 Generate DDR Report
+                </button>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress" id="progressSection">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill">0%</div>
+                </div>
+                <div class="progress-text" id="progressText">Initializing...</div>
+            </div>
+
+            <!-- Results -->
+            <div class="results" id="resultsSection">
+                <h2>✅ Generation Complete!</h2>
+                <div class="result-item">
+                    <h3>📄 Final DDR Report</h3>
+                    <p>Client-ready detailed diagnostic report in DOCX format</p>
+                    <a href="#" class="download-link">Download Report</a>
+                </div>
+                <div class="result-item">
+                    <h3>📊 Analysis Data</h3>
+                    <p>Structured JSON data from analysis pipeline</p>
+                    <a href="#" class="download-link">View JSON Data</a>
+                </div>
+                <div class="result-item">
+                    <h3>🖼️ Extracted Images</h3>
+                    <p>Images extracted from both reports</p>
+                    <a href="#" class="download-link">View Images</a>
+                </div>
+            </div>
+
+            <!-- Usage Instructions -->
+            <div class="section">
+                <h2>🚀 How to Use</h2>
+                <div class="alert alert-warning">
+                    <strong>⚙️ CLI Usage (Recommended)</strong><br>
+                    For actual report generation, use the Python CLI:<br><br>
+                    <code>python ddr_generator.py --inspection report1.pdf --thermal report2.pdf --output ./output</code>
+                </div>
+
+                <h3 style="margin-top: 20px; margin-bottom: 10px;">Setup Instructions:</h3>
+                <ol style="line-height: 1.8; margin-left: 20px;">
+                    <li>Install dependencies: <code>pip install -r requirements.txt</code></li>
+                    <li>Set API key: <code>export ANTHROPIC_API_KEY='your-key'</code></li>
+                    <li>Run the generator with your PDFs</li>
+                    <li>Find output in the specified output directory</li>
+                </ol>
+            </div>
+
+            <!-- DDR Structure -->
+            <div class="section">
+                <h2>📋 DDR Report Structure</h2>
+                <p>The generated report includes:</p>
+                <ol style="line-height: 1.8; margin-left: 20px; margin-top: 15px;">
+                    <li><strong>Property Issue Summary</strong> - Overview of property and main issues</li>
+                    <li><strong>Area-wise Observations</strong> - Detailed findings by location</li>
+                    <li><strong>Probable Root Cause</strong> - Analysis of underlying issues</li>
+                    <li><strong>Severity Assessment</strong> - Risk evaluation with reasoning</li>
+                    <li><strong>Recommended Actions</strong> - Immediate, short-term, and long-term steps</li>
+                    <li><strong>Additional Notes</strong> - Conflicts, clarifications, observations</li>
+                    <li><strong>Missing Information</strong> - Explicitly noted data gaps</li>
+                </ol>
+            </div>
+
+            <!-- Technical Details -->
+            <div class="section">
+                <h2>🔧 Technical Details</h2>
+                <div class="features">
+                    <div class="feature">
+                        <h3>Model</h3>
+                        <p>Claude Sonnet 4</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Input</h3>
+                        <p>PDF documents</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Output</h3>
+                        <p>DOCX + JSON</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Processing</h3>
+                        <p>~30-60 seconds</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // File upload handling
+        const inspectionInput = document.getElementById('inspectionFile');
+        const thermalInput = document.getElementById('thermalFile');
+        const generateBtn = document.getElementById('generateBtn');
+        const progressSection = document.getElementById('progressSection');
+        const resultsSection = document.getElementById('resultsSection');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+
+        inspectionInput.addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || '';
+            document.getElementById('inspectionFileName').textContent = fileName;
+            document.getElementById('inspectionFileInfo').classList.add('show');
+            checkFilesReady();
+        });
+
+        thermalInput.addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || '';
+            document.getElementById('thermalFileName').textContent = fileName;
+            document.getElementById('thermalFileInfo').classList.add('show');
+            checkFilesReady();
+        });
+
+        function checkFilesReady() {
+            if (inspectionInput.files.length > 0 && thermalInput.files.length > 0) {
+                generateBtn.disabled = false;
+            }
+        }
+
+        generateBtn.addEventListener('click', function() {
+            simulateGeneration();
+        });
+
+        function simulateGeneration() {
+            progressSection.classList.add('show');
+            resultsSection.classList.remove('show');
+            generateBtn.disabled = true;
+
+            const steps = [
+                { progress: 15, text: 'Extracting text from inspection report...' },
+                { progress: 30, text: 'Extracting text from thermal report...' },
+                { progress: 45, text: 'Extracting images from documents...' },
+                { progress: 60, text: 'Analyzing inspection data with AI...' },
+                { progress: 75, text: 'Analyzing thermal data with AI...' },
+                { progress: 90, text: 'Merging and synthesizing data...' },
+                { progress: 100, text: 'Generating final DDR document...' }
+            ];
+
+            let currentStep = 0;
+
+            function updateProgress() {
+                if (currentStep < steps.length) {
+                    const step = steps[currentStep];
+                    progressFill.style.width = step.progress + '%';
+                    progressFill.textContent = step.progress + '%';
+                    progressText.textContent = step.text;
+                    currentStep++;
+                    setTimeout(updateProgress, 1500);
+                } else {
+                    setTimeout(() => {
+                        progressSection.classList.remove('show');
+                        resultsSection.classList.add('show');
+                        generateBtn.disabled = false;
+                    }, 500);
+                }
+            }
+
+            updateProgress();
+        }
+
+        // Drag and drop
+        ['inspectionDropZone', 'thermalDropZone'].forEach(id => {
+            const zone = document.getElementById(id);
+            
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('dragover');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('dragover');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+                
+                const input = zone.querySelector('input[type="file"]');
+                input.files = e.dataTransfer.files;
+                input.dispatchEvent(new Event('change'));
+            });
+        });
+    </script>
+</body>
+</html>
